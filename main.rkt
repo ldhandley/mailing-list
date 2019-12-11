@@ -1,38 +1,29 @@
-#lang web-server/insta
+#lang racket
  
-(require web-server/formlets
-         "mailing-list-views.rkt"
-         "mailing-list-joiner-model.rkt")
-
-(static-files-path ".")
+(require web-server/servlet
+         web-server/servlet-env
+         web-server/formlets
+         "view.rkt"
+         "model.rkt")
 
 (define (start request)
-  (displayln (current-directory))
   (render-mailing-list-page
    (initialize-mailing-list!
     (build-path (current-directory)
                 "the-mailing-list.sqlite"))
    request))
  
-(define new-email-formlet
-  (formlet
-   (#%# ,{input-string . => . name}
-        ,{input-string . => . email})
-   (values name email)))
- 
 (define (render-mailing-list-page a-mailing-list request)
+  (define maybe-background-color 
+    (extract-bindings 'background-color (request-bindings request)))
+  (define background-color
+    (if (empty? maybe-background-color)
+      "white"
+      (first maybe-background-color)))
   (define (response-generator embed/url)
-   (joiner-view (embed/url insert-email-handler)
-                (formlet-display new-email-formlet)) 
-    #;
-    (response/xexpr
-     `(html (head (title "My Mailing List"))
-            (body
-             (h1 "My Mailing List")
-             (form ([action
-                     ,(embed/url insert-email-handler)])
-                   ,@(formlet-display new-email-formlet)
-                   (input ([type "submit"])))))))
+   (joiner-view background-color 
+                (embed/url insert-email-handler)
+                (formlet-display new-email-formlet)))
  
   (define (insert-email-handler request)
     (define-values (name email)
@@ -46,3 +37,8 @@
      `(html (head (title "Confirmation page"))
             (body
              (h1 "Thanks for joining the mailing list!"))))) 
+
+(serve/servlet #:port 8080 
+               #:servlet-path "/mailing-list"
+               #:extra-files-paths (list (build-path "."))
+               start)
