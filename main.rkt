@@ -6,6 +6,8 @@
          "view.rkt"
          "model.rkt")
 
+(provide mailing-list-server)
+
 (define (start request)
   (render-mailing-list-page
    (initialize-mailing-list!
@@ -38,7 +40,9 @@
             (body
              (h1 "Thanks for joining the mailing list!"))))) 
 
-(serve/servlet #:port 8080 
-               #:servlet-path "/mailing-list"
-               #:extra-files-paths (list (build-path "."))
-               start)
+(define (mailing-list-server)
+  (serve/servlet #:port 8080 
+                 #:servlet-path "/mailing-list"
+                 #:extra-files-paths (list (build-path "."))
+                 start)
+  )
