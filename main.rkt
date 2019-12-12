@@ -43,6 +43,9 @@
 (define (mailing-list-server)
   (serve/servlet #:port 8080 
                  #:servlet-path "/mailing-list"
+                 #:listen-ip "0.0.0.0"
                  #:extra-files-paths (list (build-path "."))
-                 start)
-  )
+                 start))
+
+(module+ main
+  (mailing-list-server))
