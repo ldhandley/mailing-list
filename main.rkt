@@ -8,7 +8,7 @@
 
 (provide mailing-list-server)
 
-(define (start request)
+(define (list-join request list-name)
   (render-mailing-list-page
    (initialize-mailing-list!
     (build-path (current-directory)
@@ -41,11 +41,18 @@
              (h1 "Thanks for joining the mailing list!"))))) 
 
 (define (mailing-list-server)
+  (define-values (mailing-list-dispatch mailing-list-url)
+    (dispatch-rules
+      [("lists" (string-arg) "join") list-join]
+      )
+    )
   (serve/servlet #:port 8080 
-                 #:servlet-path "/mailing-list"
+                 #:servlet-regexp #rx""
+                 #:servlet-path "/lists/customers/join"
                  #:listen-ip "0.0.0.0"
                  #:extra-files-paths (list (build-path "."))
-                 start))
+                 mailing-list-dispatch 
+                 ))
 
 (module+ main
   (mailing-list-server))
