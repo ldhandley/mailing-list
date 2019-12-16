@@ -26,4 +26,4 @@ docker tag haoliangyu/ecs-auto-deploy:latest $IMAGE_REPO_URL:latest
 docker push $IMAGE_REPO_URL:latest
 
 # update an AWS ECS service with the new image
-ecs-deploy -c $CLUSTER_NAME -d $TASK_DEFINITION_NAME -i $IMAGE_REPO_URL:latest
+ecs-deploy -c $CLUSTER_NAME -d $TASK_DEFINITION_NAME -i $IMAGE_REPO_URL:latest --run-task
