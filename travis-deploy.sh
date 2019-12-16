@@ -17,6 +17,8 @@ sudo chmod +x /usr/bin/ecs-deploy
 
 # or login DockerHub
 docker login --username $DOCKER_HUB_USER --password $DOCKER_HUB_PSW
+docker build . --tag=srfoster/mailing-list-server
+docker push srfoster/mailing-list-server
 
 # build the docker image and push to an image repository
 docker build -t haoliangyu/ecs-auto-deploy .

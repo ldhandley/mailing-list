@@ -37,7 +37,8 @@ before_install:
 - export PATH="${RACKET_DIR}/bin:${PATH}" #install-racket.sh can't set for us
 
 install:
- - raco pkg install --auto mailing-list-server/
+ - cd $TRAVIS_BUILD_DIR 
+ - raco pkg install --auto 
 
 before_script:
 
