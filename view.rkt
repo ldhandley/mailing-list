@@ -24,9 +24,9 @@
   (f:formlet
     (div 
       (div ([class "form-group"])
-        (label "Name:"),{(form-control "text") . => . name}) 
+        (label "Name"),{(form-control "text") . => . name}) 
       (div ([class "form-group"])
-        (label "Email:"),{(form-control "email") . => . email}))
+        (label "Email"),{(form-control "email") . => . email}))
    (values name email)))
  
 (define (webpage color action-path displayed-formlet)
